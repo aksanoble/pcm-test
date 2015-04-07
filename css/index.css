@@ -1,0 +1,26 @@
+@media(max-width:767px){
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+  thead {
+    display: none;
+  }
+}
+
+.table-head{
+  background-color: #AAAAAA;}
+
+tbody td:first-child {
+  background-color: #FFDC00;
+}
+
+.checked {
+  background-color: #7FDBFF;
+}
+
+th{
+  text-align: center;}
+
+.table-body{
+  font-size: 1.2rem;
+  cursor: pointer;}
