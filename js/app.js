@@ -1,4 +1,11 @@
 $(function () {
+  $("td").tooltip({
+  title: '5/10',
+  container: 'body'
+});
+
+//$('td').attr('title', 'NEW_TITLE').tooltip('fixTitle').tooltip();
+
   var app = app || {};
 
   //Defining Model
@@ -10,23 +17,22 @@ $(function () {
     localStorage: new Backbone.LocalStorage("pcm-matrix")
   });
 
-
   // Main View
   app.View = Backbone.View.extend({
 
-    el: '#mainview',
+    el: 'table',
 
     events: {
-      'click td': 'updateKey'
+      'click td': 'updateKey',
+      'mouseover td': 'showStat'
     },
 
     initialize: function () {
       this.model.on('all', this.render, this);
 
-      this.model.fetch()
-        .then(function () {
-          this.render();
-        }.bind(this));
+      this.model.fetch();
+      this.render();
+
     },
     updateKey: function (e) {
       var $cellIndex = $("td").index(e.target);
@@ -46,7 +52,14 @@ $(function () {
       var matrixCell = this.model.get('key');
       _.each(matrixCell, this.addClass);
 
+    },
+
+    showStat: function(event) {
+      $(event.target).attr('title', '23/100').tooltip('fixTitle').tooltip();
+      $('td').tooltip();
     }
+
+
   });
 
   var App = new app.View({model: new app.Key({id: 27182})});
