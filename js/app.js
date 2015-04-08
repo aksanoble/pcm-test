@@ -1,6 +1,23 @@
 $(function() {
   var app = app || {};
 
+  app.Keys = Backbone.Collection.extend({
+
+  //model: app.Key,
+
+  localStorage: new Backbone.LocalStorage("pcm-matrix")
+
+  });
+
+  app.keys = new app.Keys();
+  app.keys.create([{key:2}]);
+  console.log(app.keys.toJSON());
+  app.keys.fetch();
+  console.log(app.keys.length);
+
+  app.key = app.keys.last();
+  console.log(app.keys.toJSON());
+  /*
 //Defining Model
   app.Key = Backbone.Model.extend({
     defaults: function() {
@@ -10,18 +27,13 @@ $(function() {
     }
   });
 
+  console.log(!app.keys.length);
+  if (!app.keys.length) {
   app.key = new app.Key();
-
+  app.keys.add(app.key);
+  app.key.save();
+} else app.key = keys.first();
   // Defining Collection
-  app.Keys = Backbone.Collection.extend({
-
-  model: app.Key,
-
-  localStorage: new Backbone.LocalStorage("pcm-matrix")
-
-  });
-
-  app.keys = new app.Keys();
 
 // Main View
   app.View = Backbone.View.extend({
@@ -65,5 +77,5 @@ $(function() {
     }
   });
 
-  var App = new app.View();
+  var App = new app.View();*/
 });
