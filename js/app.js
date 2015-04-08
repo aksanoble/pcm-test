@@ -1,27 +1,17 @@
-$(function() {
+$(function () {
   var app = app || {};
 
 //Defining Model
-  app.Key = Backbone.Model.extend({
-    defaults: function() {
-      return {
-        key: [0,5,10]
-      };
-    }
-  });
-
-  app.key = new app.Key();
+  app.Key = Backbone.Model.extend({});
 
   // Defining Collection
   app.Keys = Backbone.Collection.extend({
 
-  model: app.Key,
+    model: app.Key,
 
-  localStorage: new Backbone.LocalStorage("pcm-matrix")
+    localStorage: new Backbone.LocalStorage("pcm-matrix")
 
   });
-
-  app.keys = new app.Keys();
 
 // Main View
   app.View = Backbone.View.extend({
@@ -30,40 +20,32 @@ $(function() {
     //template: _.template($('#mymodel-template').html()),
 
     events: {
-      'click td' : 'updateKey',
-      },
+      'click td': 'updateKey'
+    },
 
-    model: app.key,
-
-    initialize: function() {
-      this.listenTo(this.model, 'all', this.render);
-      app.keys.fetch();
+    initialize: function () {
+      this.collection.fetch();
       return this.render();
     },
-    updateKey: function(e) {
-      console.log("clicked!");
-      cellIndex = $("td").index(e.target);
-      console.log(cellIndex);
-      matrixKey = _.clone(this.model.get('key')); //Using clone as if referred to the same  object does not trigger changed event
-      matrixKey[Math.floor(cellIndex/5)] = cellIndex;
-       app.key.save({key : matrixKey});
+    updateKey: function (e) {
+      var $cellIndex = $("td").index(e.target);
+      var matrixKey = _.clone(this.collection.find('key')); //Using clone as if referred to the same  object does not trigger changed event
+      matrixKey[Math.floor($cellIndex / 5)] = $cellIndex;
+      this.collection.create({key: matrixKey});
     },
 
-    addClass: function(cell) {
-      console.log(cell);
-      $("td:eq(" + cell+ ")").nextAll().removeClass("checked");
-      $("td:eq(" + cell+ ")").prevAll().addBack().addClass("checked");
+    addClass: function (cell) {
+      var $cellEl = $("td:eq(" + cell + ")");
+      $cellEl.nextAll().removeClass("checked");
+      $cellEl.prevAll().addBack().addClass("checked");
     },
 
-    render: function() {
-      //this.$('#mymodel').html(this.template(app.key.toJSON()));
-      console.log('render triggered');
-      var matrixCell = app.key.get('key');
+    render: function () {
+      var matrixCell = this.collection.find('key');
       _.each(matrixCell, this.addClass);
-      //this.addClass(mymodel.get('key'));
-
+      return this;
     }
   });
 
-  var App = new app.View();
+  var App = new app.View({collection: new app.Keys()});
 });
