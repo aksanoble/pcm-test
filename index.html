@@ -13,17 +13,27 @@
 </head>
 <body>
 
-
 <div id="mainview" class="container">
-  <div class="span6">
-    <div id="mymodel"></div>
-  </div>
+<!--<div id="mainview" class="container">-->
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Programmer Competency Matrix</a>
+      </div>
+      <button id="submit" type="button" class="btn btn-success navbar-btn navbar-right">Submit
+      </button>
+    </div>
+  </nav>
 
-  <div class="page-header">
+  <!--<div class="page-header">
     <h1>Programmer Competency Matrix </h1>
 
     <p class="lead">Track your progress as a programmer</p>
   </div>
+-->
+
+
+
   <table class="table table-bordered table-hover" id="pcm-table">
     <thead class="table-head">
     <tr>
@@ -36,7 +46,7 @@
     </thead>
     <tbody class="table-body">
     <tr>
-      <td id="testjs">data structures</td>
+      <td>data structures</td>
       <td>Doesn't know the difference between Array and LinkedList</td>
       <td>Able to explain and use Arrays, LinkedLists, Dictionaries etc in practical programming tasks</td>
       <td>Knows space and time tradeoffs of the basic data structures, Arrays vs LinkedLists, Able to explain how
@@ -77,9 +87,12 @@
     </tbody>
 
   </table>
+  <div id='text'>
+
+  </div>
 
 </div>
-
+<script src="http://cdn.pubnub.com/pubnub-3.7.1.min.js"></script>
 <script src="js/lib/jquery/dist/jquery.js"></script>
 <script src="js/lib/bootstrap/bootstrap.min.js"></script>
 <script src="js/lib/underscore/underscore.js"></script>
