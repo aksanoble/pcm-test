@@ -15,9 +15,9 @@ $(function () {
   });
 
   app.stat = new app.Stat({id:4890});
-  //console.log(app.stat.toJSON());
+
   app.stat.fetch();
-  //console.log(app.stat.toJSON());
+
 
 
   //Defining Matrix Key Model
