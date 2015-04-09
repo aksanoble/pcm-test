@@ -1,17 +1,29 @@
 $(function () {
-  $("td").tooltip({
-  title: '5/10',
+  $('td:not(:first-child').tooltip({
+  title: '',
   container: 'body'
 });
 
-//$('td').attr('title', 'NEW_TITLE').tooltip('fixTitle').tooltip();
-
   var app = app || {};
 
-  //Defining Model
+  app.Stat = Backbone.Model.extend({
+    defaults: {
+      stats: [[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+    },
+
+    localStorage: new Backbone.LocalStorage("pcm-stat")
+  });
+
+  app.stat = new app.Stat({id:4890});
+  //console.log(app.stat.toJSON());
+  app.stat.fetch();
+  //console.log(app.stat.toJSON());
+
+
+  //Defining Matrix Key Model
   app.Key = Backbone.Model.extend({
     defaults: {
-      key: [0, 5, 10]
+      key: [0, 0, 0]
     },
 
     localStorage: new Backbone.LocalStorage("pcm-matrix")
@@ -24,11 +36,11 @@ $(function () {
 
     events: {
       'click td': 'updateKey',
-      'mouseover td': 'showStat'
     },
 
     initialize: function () {
       this.model.on('all', this.render, this);
+      this.model.on('change', this.updateStat, this);
 
       this.model.fetch();
       this.render();
@@ -36,13 +48,13 @@ $(function () {
     },
     updateKey: function (e) {
       var $cellIndex = $("td").index(e.target);
+      //console.log($cellIndex);
       var matrixKey = _.clone(this.model.get('key'));
-      matrixKey[Math.floor($cellIndex / 5)] = $cellIndex;
+      matrixKey[Math.floor($cellIndex / 5)] = $cellIndex % 5;
       this.model.save({key: matrixKey});
     },
 
     addClass: function (cell) {
-      console.log(cell);
       var $cell = $("td:eq(" + cell + ")");
       $cell.nextAll().removeClass("checked");
       $cell.prevAll().addBack().addClass("checked");
@@ -50,15 +62,45 @@ $(function () {
 
     render: function () {
       var matrixCell = this.model.get('key');
-      _.each(matrixCell, this.addClass);
+    //  console.log(matrixCell);
+      var cellKey = _.map(matrixCell, function(num, i){ return i * 5 + num; });
+    //  console.log(cellKey);
+      _.each(cellKey, this.addClass);
 
     },
 
-    showStat: function(event) {
-      $(event.target).attr('title', '23/100').tooltip('fixTitle').tooltip();
-      $('td').tooltip();
-    }
+    updateStat: function() {
+      var matrixCell = this.model.get('key');
+      //console.log(matrixCell);
+      var currentStat = _.clone(app.stat.get('stats'));
+      //console.log(currentStat);
+      _.map(currentStat, newStat);
+       function newStat (value, index){
+        ++value[matrixCell[index]-1];
+      }
+      app.stat.set({stats: currentStat});
+      //console.log(currentStat);
+      app.stat.save();
+      this.updateDisplay();
+    },
 
+    updateDisplay: function() {
+      var currentStat = app.stat.get('stats');
+      var flatStat = _.flatten(_.map(currentStat, _.values));
+      var totalHits = _.reduce(_.first(flatStat, 4), function(sum, el) {
+          return sum + el;}, 0).toString();
+      //console.log(totalHits);
+      //console.log(flatStat);
+      _.map(flatStat, function(data, cell){
+        console.log(cell);
+        cell = cell;
+        var statString = data.toString() + "/" + totalHits;
+        console.log(statString);
+        var $cell = $("td:not(:first-child):eq(" + cell+ ")");
+        $cell.attr('title', statString).tooltip('fixTitle').tooltip();
+      });
+
+    }
 
   });
 
