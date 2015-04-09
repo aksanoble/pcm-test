@@ -74,8 +74,8 @@ $(function () {
       //console.log(matrixCell);
       var currentStat = _.clone(app.stat.get('stats'));
       //console.log(currentStat);
-      _.map(currentStat, newStat);
-       function newStat (value, index){
+      _.map(currentStat, increment);
+       function increment (value, index){
         ++value[matrixCell[index]-1];
       }
       app.stat.set({stats: currentStat});
