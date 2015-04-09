@@ -16,7 +16,7 @@ $(function () {
 
   app.stat = new app.Stat({id:4890});
   //console.log(app.stat.toJSON());
-  app.stat.fetch();
+  //app.stat.fetch();
   //console.log(app.stat.toJSON());
 
 
@@ -85,8 +85,8 @@ $(function () {
     },
 
     updateDisplay: function() {
-      var currentStat = app.stat.get('stats');
-      var flatStat = _.flatten(_.map(currentStat, _.values));
+      var currentStats = app.stat.get('stats');
+      var flatStat = _.flatten(_.map(currentStats, _.values));
       var totalHits = _.reduce(_.first(flatStat, 4), function(sum, el) {
           return sum + el;}, 0).toString();
       //console.log(totalHits);
