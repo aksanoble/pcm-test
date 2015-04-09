@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<div class="container">
+<div id="mainview" class="container">
 <!--<div id="mainview" class="container">-->
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
@@ -29,9 +29,6 @@
     <h1>Programmer Competency Matrix </h1>
 
     <p class="lead">Track your progress as a programmer</p>
-    <button id="logout" type="button" class="btn btn-default navbar-btn navbar-right">Logout
-      <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
-    </button>
   </div>
 -->
 
@@ -90,9 +87,12 @@
     </tbody>
 
   </table>
+  <div id='text'>
+
+  </div>
 
 </div>
-
+<script src="http://cdn.pubnub.com/pubnub-3.7.1.min.js"></script>
 <script src="js/lib/jquery/dist/jquery.js"></script>
 <script src="js/lib/bootstrap/bootstrap.min.js"></script>
 <script src="js/lib/underscore/underscore.js"></script>

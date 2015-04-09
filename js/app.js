@@ -1,4 +1,29 @@
 $(function () {
+      pubnub = PUBNUB.init({
+          publish_key   : 'demo',
+          subscribe_key : 'demo'
+      });
+
+      pubnub.time(function(time){
+          console.log(time);
+      });
+
+      pubnub.subscribe({
+        channel: 'my_channel',
+        message: function(m){console.log(m);},
+        error: function (error) {
+          // Handle error here
+          console.log(JSON.stringify(error));
+        }
+      });
+
+      pubnub.publish({
+        channel : 'my_channel',
+        message : "Hello from PubNub Docs!",
+        callback: function(m){ console.log(m); }
+      });
+
+
   $('td:not(:first-child').tooltip({
   title: '',
   container: 'body'
@@ -32,17 +57,19 @@ $(function () {
   // Main View
   app.View = Backbone.View.extend({
 
-    el: 'table',
+    el: '#mainview',
 
     events: {
       'click td': 'updateKey',
+      'click button': 'updateStat'
     },
 
     initialize: function () {
       this.model.on('all', this.render, this);
-      this.model.on('change', this.updateStat, this);
+      //this.model.on('change', this.updateStat, this);
 
       this.model.fetch();
+      this.updateStat();
       this.render();
 
     },
@@ -82,6 +109,7 @@ $(function () {
       //console.log(currentStat);
       app.stat.save();
       this.updateDisplay();
+
     },
 
     updateDisplay: function() {
@@ -92,10 +120,8 @@ $(function () {
       //console.log(totalHits);
       //console.log(flatStat);
       _.map(flatStat, function(data, cell){
-        console.log(cell);
         cell = cell;
         var statString = data.toString() + "/" + totalHits;
-        console.log(statString);
         var $cell = $("td:not(:first-child):eq(" + cell+ ")");
         $cell.attr('title', statString).tooltip('fixTitle').tooltip();
       });
