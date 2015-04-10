@@ -1,4 +1,6 @@
 $(function () {
+  var app = app || {};
+  uuid = PUBNUB.uuid();
       pubnub = PUBNUB.init({
           publish_key   : 'demo',
           subscribe_key : 'demo'
@@ -8,28 +10,63 @@ $(function () {
           console.log(time);
       });
 
-      pubnub.subscribe({
-        channel: 'my_channel',
-        message: function(m){console.log(m);},
-        error: function (error) {
-          // Handle error here
-          console.log(JSON.stringify(error));
-        }
-      });
+  pubnub.subscribe({
+   channel : 'test11',
+   message : function( message, env, channel ){
+      // RECEIVED A MESSAGE.
+      console.log(message);
+   },
+   connect: function(){
+     console.log("Connected");
+     pubnub.publish({
+       channel : 'test11',
+       message : "Hello from aksn",
+       callback: function(m){ console.log("sent!"); }
+     });},
+     disconnect: function(){console.log("Disconnected");},
+     reconnect: function(){console.log("Reconnected");},
+     error: function(){console.log("Network Error");},
 
-      pubnub.publish({
-        channel : 'my_channel',
-        message : "Hello from PubNub Docs!",
-        callback: function(m){ console.log(m); }
-      });
+});
 
+/*
+      pubsub = {
+        sub: function() {
+          pubnub.subscribe({
+            channel: 'test11',
+            message: function(m){console.log("received!");},
+            error: function (error) {
+                    console.log(JSON.stringify(error));}
+          });
+          return true;
+        },
+
+        pub: function() {
+          pubnub.publish({
+          channel : 'test11',
+          message : "Hello from aksn",
+          callback: function(m){ console.log("sent!"); }
+        });
+        },
+
+        initialize: function() {
+        this.sub()
+        .then(function(){
+            this.pub();
+        }.bind(this));
+      }
+    };
+
+      pubsub.initialize();
+*/
+      //subscribe().then(app.publish);
 
   $('td:not(:first-child').tooltip({
   title: '',
   container: 'body'
 });
 
-  var app = app || {};
+
 
   app.Stat = Backbone.Model.extend({
     defaults: {
@@ -61,8 +98,14 @@ $(function () {
 
     events: {
       'click td': 'updateKey',
-      'click button': 'updateStat'
+      'click button': 'publishNow'
     },
+
+    publishNow: function() {pubnub.publish({
+      channel : 'test11',
+      message : "Hello from aksn",
+      callback: function(m){ console.log("sent!"); }
+    });},
 
     initialize: function () {
       this.model.on('all', this.render, this);
