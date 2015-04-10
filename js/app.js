@@ -64,7 +64,7 @@ $(function () {
   $('td:not(:first-child').tooltip({
   title: '',
   container: 'body'
-});
+  });
 
 
 
