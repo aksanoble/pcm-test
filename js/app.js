@@ -45,9 +45,11 @@ $(function () {
 
 //pubnub.subscribe(_.extend(subscribeObj, {connect: function(){console.log("extended");}}));
 
-  $('td:not(:first-child').tooltip({
+  $('td:not(:first-child').popover({
   title: '',
-  container: 'body'
+  container: 'body',
+  placement: 'top',
+  trigger: 'hover'
   });
 
   app.Stat = Backbone.Model.extend({
@@ -149,7 +151,7 @@ $(function () {
         cell = cell;
         var statString = data.toString() + "/" + totalHits;
         var $cell = $("td:not(:first-child):eq(" + cell+ ")");
-        $cell.tooltip('hide').attr('title', statString).tooltip('fixTitle').tooltip();
+        $cell.attr('data-content', statString).data('bs.popover').setContent();
       });
 
       this.publishNow();
