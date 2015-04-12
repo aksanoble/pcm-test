@@ -10,75 +10,58 @@ $(function () {
           console.log(time);
       });
 
-  pubnub.subscribe({
-   channel : 'test11',
-   message : function( message, env, channel ){
-      // RECEIVED A MESSAGE.
-      console.log(message);
-   },
-   connect: function(){
-     console.log("Connected");
+  var subscribeObj = {
+    channel : 'test11',
+    message : function( message, env, channel ){
+       // RECEIVED A MESSAGE.
+       console.log("message received");
+       var wireStat = message;
+       console.log(wireStat);
+       var currentStat = app.stat.get('stats');
+       console.log(currentStat);
+       console.log(_.reduce(_.first(wireStat, 4), function(sum, el) {
+           return sum + el;}, 0) > _.reduce(_.first(currentStat, 4), function(sum, el) {
+               return sum + el;}, 0) );
+       if (_.reduce(_.first(wireStat, 4), function(sum, el) {
+           return sum + el;}, 0) > _.reduce(_.first(currentStat, 4), function(sum, el) {
+               return sum + el;}, 0) ) {
+                 app.stat.set({stats: wireStat});
+                 //console.log(currentStat);
+                 app.stat.save();
+                 App.updateDisplay();
+               }
+    },
+    connect: function() {
      pubnub.publish({
-       channel : 'test11',
-       message : "Hello from aksn",
-       callback: function(m){ console.log("sent!"); }
-     });},
-     disconnect: function(){console.log("Disconnected");},
-     reconnect: function(){console.log("Reconnected");},
-     error: function(){console.log("Network Error");},
+        channel : 'test11',
+        message : app.stat.get('stats'),
+        callback: function(m){ console.log("sent!"); }
+      });},
+      disconnect: function(){console.log("Disconnected");},
+      reconnect: function(){console.log("Reconnected");},
+      error: function(){console.log("Network Error");},};
 
-});
+  pubnub.subscribe(subscribeObj);
 
-/*
-      pubsub = {
-        sub: function() {
-          pubnub.subscribe({
-            channel: 'test11',
-            message: function(m){console.log("received!");},
-            error: function (error) {
-                    console.log(JSON.stringify(error));}
-          });
-          return true;
-        },
-
-        pub: function() {
-          pubnub.publish({
-          channel : 'test11',
-          message : "Hello from aksn",
-          callback: function(m){ console.log("sent!"); }
-        });
-        },
-
-        initialize: function() {
-        this.sub()
-        .then(function(){
-            this.pub();
-        }.bind(this));
-      }
-    };
-
-      pubsub.initialize();
-*/
-      //subscribe().then(app.publish);
+//pubnub.subscribe(_.extend(subscribeObj, {connect: function(){console.log("extended");}}));
 
   $('td:not(:first-child').tooltip({
   title: '',
   container: 'body'
   });
 
-
-
   app.Stat = Backbone.Model.extend({
     defaults: {
       stats: [[0,0,0,0],[0,0,0,0],[0,0,0,0]]
     },
 
-    localStorage: new Backbone.LocalStorage("pcm-stat")
+  localStorage: new Backbone.LocalStorage("pcm-stat")
   });
 
   app.stat = new app.Stat({id:4890});
 
   app.stat.fetch();
+
 
 
 
@@ -98,12 +81,12 @@ $(function () {
 
     events: {
       'click td': 'updateKey',
-      'click button': 'publishNow'
+      'click button': 'updateStat'
     },
 
     publishNow: function() {pubnub.publish({
       channel : 'test11',
-      message : "Hello from aksn",
+      message : app.stat.get('stats'),
       callback: function(m){ console.log("sent!"); }
     });},
 
@@ -166,12 +149,12 @@ $(function () {
         cell = cell;
         var statString = data.toString() + "/" + totalHits;
         var $cell = $("td:not(:first-child):eq(" + cell+ ")");
-        $cell.attr('title', statString).tooltip('fixTitle').tooltip();
+        $cell.tooltip('hide').attr('title', statString).tooltip('fixTitle').tooltip();
       });
 
+      this.publishNow();
     }
 
   });
-
   var App = new app.View({model: new app.Key({id: 27182})});
 });
