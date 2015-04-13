@@ -33,12 +33,7 @@ $(function () {
               },
 
     connect: function() {
-               /*pubnub.publish({
-                  channel : 'test11',
-                  message : app.stat.get('stats'),
-                  callback: function(m){ console.log("sent!"); }
-                });*/
-                  pubnub.history({
+                   pubnub.history({
                    channel: 'test11',
                    count: 1,
                    callback: function(m){
@@ -52,8 +47,6 @@ $(function () {
     reconnect: function(){console.log("Reconnected");},
     error: function(){console.log("Network Error");},};
 
-  pubnub.subscribe(subscribeObj);
-
   $('td:not(:first-child').popover({
   title: '',
   container: 'body',
@@ -66,7 +59,7 @@ $(function () {
       stats: [[0,0,0,0],[0,0,0,0],[0,0,0,0]]
     },
 
-    initialize: function() {this.fetch();},
+    //initialize: function() {this.fetch();},
 
     localStorage: new Backbone.LocalStorage("pcm-stat")
   });
@@ -90,7 +83,6 @@ $(function () {
 
     events: {
       'click td': 'updateKey',
-      //'click button': 'updateStat'
       'click button': 'onSubmit'
     },
 
@@ -109,16 +101,13 @@ $(function () {
     initialize: function () {
       this.model.on('all', this.render, this);
       //this.model.on('change', this.updateStat, this);
-
+      pubnub.subscribe(subscribeObj);
       this.model.fetch();
-      this.updateStat();
-      this.updatePopover();
       this.render();
 
     },
     updateKey: function (e) {
       var $cellIndex = $("td").index(e.target);
-      //console.log($cellIndex);
       var matrixKey = _.clone(this.model.get('key'));
       matrixKey[Math.floor($cellIndex / 5)] = $cellIndex % 5;
       this.model.save({key: matrixKey});
@@ -140,10 +129,9 @@ $(function () {
     updateStat: function() {
       var matrixCell = this.model.get('key');
       var currentStat = _.clone(app.stat.get('stats'));
-      _.map(currentStat, increment);
-       function increment (value, index){
-        ++value[matrixCell[index]-1];
-      }
+      _.map(currentStat, function (value, index){
+       ++value[matrixCell[index]-1];
+      });
       app.stat.set({stats: currentStat});
       app.stat.save();
     },
