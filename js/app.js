@@ -12,60 +12,51 @@ $(function () {
 
   var subscribeObj = {
     channel : 'test11',
+
     message : function( message, env, channel ){
               // RECEIVED A MESSAGE.
-               console.log("message received");
-               var wireStat = message;
-               console.log(wireStat);
-               var currentStat = app.stat.get('stats');
-               //console.log(currentStat);
-               var totalHitsOnWire = _.reduce(_.first(wireStat, 4), function(sum, el) {
-                   return sum + el;}, 0);
+      console.log("message received");
+      var wireStat = message;
+      var currentStat = app.popOverView.model.get('stats');
+      var totalHitsOnWire = _.reduce(_.first(wireStat, 4), function(sum, el) {
+        return sum + el;}, 0);
 
-               var totalHitsCurrent = _.reduce(_.first(currentStat, 4), function(sum, el) {
-                       return sum + el;}, 0);
+      var totalHitsCurrent = _.reduce(_.first(currentStat, 4), function(sum, el) {
+        return sum + el;}, 0);
 
-               if (totalHitsOnWire > totalHitsCurrent ) {
-                         app.stat.set({stats: wireStat});
-                         app.stat.save();
-                         App.updatePopover();
-               }
-              },
+      if (totalHitsOnWire > totalHitsCurrent ) {
+        app.popOverView.model.set({stats: wireStat});
+        app.popOverView.model.save();
+        }
+    },
 
     connect: function() {
-                   pubnub.history({
-                   channel: 'test11',
-                   count: 1,
-                   callback: function(m){
-                    console.log((m[0][0]));
-                    app.stat.set({stats: m[0][0]});
-                    app.stat.save();
-                    App.updatePopover();}
-                  });
-             },
-    disconnect: function(){console.log("Disconnected");},
-    reconnect: function(){console.log("Reconnected");},
-    error: function(){console.log("Network Error");},};
+      pubnub.history({
+        channel: 'test11',
+        count: 1,
+        callback: function(m){
+          app.popOverView.model.set({stats: m[0][0]});
+          app.popOverView.model.save();
+        }
+      });
+    },
 
-  $('td:not(:first-child').popover({
-  title: '',
-  container: 'body',
-  placement: 'top',
-  trigger: 'hover'
-  });
+    disconnect: function(){
+      console.log("Disconnected");},
+    reconnect: function(){
+      console.log("Reconnected");},
+    error: function(){
+      console.log("Network Error");}
+
+  };
 
   app.Stat = Backbone.Model.extend({
     defaults: {
       stats: [[0,0,0,0],[0,0,0,0],[0,0,0,0]]
     },
 
-    //initialize: function() {this.fetch();},
-
     localStorage: new Backbone.LocalStorage("pcm-stat")
   });
-
-  app.stat = new app.Stat({id:4890});
-
 
   //Defining Matrix Key Model
   app.Key = Backbone.Model.extend({
@@ -88,24 +79,24 @@ $(function () {
 
     onSubmit: function() {
       this.updateStat();
-      this.updatePopover();
+  //    this.updatePopover();
       this.publishNow();
     },
 
     publishNow: function() {pubnub.publish({
       channel : 'test11',
-      message : app.stat.get('stats'),
+      message : app.popOverView.model.get('stats'),
       callback: function(m){ console.log("sent!"); }
     });},
 
     initialize: function () {
       this.model.on('all', this.render, this);
       //this.model.on('change', this.updateStat, this);
-      pubnub.subscribe(subscribeObj);
       this.model.fetch();
       this.render();
 
     },
+
     updateKey: function (e) {
       var $cellIndex = $("td").index(e.target);
       var matrixKey = _.clone(this.model.get('key'));
@@ -128,29 +119,49 @@ $(function () {
 
     updateStat: function() {
       var matrixCell = this.model.get('key');
-      var currentStat = _.clone(app.stat.get('stats'));
+      var currentStat = _.clone(app.popOverView.model.get('stats'));
       _.map(currentStat, function (value, index){
        ++value[matrixCell[index]-1];
       });
-      app.stat.set({stats: currentStat});
-      app.stat.save();
+      app.popOverView.model.set({stats: currentStat});
+      app.popOverView.model.save();
     },
 
-    updatePopover: function() {
-      var currentStats = app.stat.get('stats');
+  });
+
+
+  var App = new app.View({model: new app.Key({id: 27182})});
+
+    app.PopOverView = Backbone.View.extend({
+
+    el: $("td:not(:first-child)"),
+
+    render : function(event) {
+      var currentStats = this.model.get('stats');
       var flatStat = _.flatten(_.map(currentStats, _.values));
       var totalHits = _.reduce(_.first(flatStat, 4), function(sum, el) {
-          return sum + el;}, 0).toString();
+        return sum + el;}, 0).toString();
 
       _.map(flatStat, function(data, cell){
         cell = cell;
         var statString = data.toString() + "/" + totalHits;
         var $cell = $("td:not(:first-child):eq(" + cell+ ")");
         $cell.attr('data-content', statString).data('bs.popover').setContent();
-      });
+        });},
 
+    initialize: function () {
+      $el = this.$el;
+      $el.popover({
+      title: '',
+      trigger: 'hover',
+      container: 'body',
+      placement: 'top',
+      });
+      pubnub.subscribe(subscribeObj);
+      this.model.on('all', this.render, this);
     }
 
   });
-  var App = new app.View({model: new app.Key({id: 27182})});
+
+  app.popOverView = new app.PopOverView({model: new app.Stat({id:4890})});
 });
