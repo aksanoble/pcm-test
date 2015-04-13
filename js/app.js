@@ -7,21 +7,21 @@ $(function () {
       });
 
       pubnub.time(function(time){
-        console.log(time);
+          console.log(time);
       });
 
   var subscribeObj = {
     channel : 'test11',
     message : function( message, env, channel ){
        // RECEIVED A MESSAGE.
-      // console.log("message received");
+       console.log("message received");
        var wireStat = message;
-      // console.log(wireStat);
+       console.log(wireStat);
        var currentStat = app.stat.get('stats');
-      // console.log(currentStat);
-      /* console.log(_.reduce(_.first(wireStat, 4), function(sum, el) {
+       console.log(currentStat);
+       console.log(_.reduce(_.first(wireStat, 4), function(sum, el) {
            return sum + el;}, 0) > _.reduce(_.first(currentStat, 4), function(sum, el) {
-               return sum + el;}, 0) );*/
+               return sum + el;}, 0) );
        if (_.reduce(_.first(wireStat, 4), function(sum, el) {
            return sum + el;}, 0) > _.reduce(_.first(currentStat, 4), function(sum, el) {
                return sum + el;}, 0) ) {
@@ -32,29 +32,18 @@ $(function () {
                }
     },
     connect: function() {
-     /*pubnub.publish({
+     pubnub.publish({
         channel : 'test11',
         message : app.stat.get('stats'),
         callback: function(m){ console.log("sent!"); }
-      });}*/
-      pubnub.history({
-        channel: 'test11',
-        count: 1,
-        callback: function(m){
-          console.log(JSON.stringify(m[0][0]));
-          app.stat.set({stats: JSON.stringify(m[0][0])});
-          app.stat.save();
-          App.updateDisplay();
-        }
-
-        });
-      },
+      });},
       disconnect: function(){console.log("Disconnected");},
       reconnect: function(){console.log("Reconnected");},
       error: function(){console.log("Network Error");},};
 
-
   pubnub.subscribe(subscribeObj);
+
+//pubnub.subscribe(_.extend(subscribeObj, {connect: function(){console.log("extended");}}));
 
   $('td:not(:first-child').popover({
   title: '',
@@ -73,8 +62,10 @@ $(function () {
 
   app.stat = new app.Stat({id:4890});
 
-
   app.stat.fetch();
+
+
+
 
   //Defining Matrix Key Model
   app.Key = Backbone.Model.extend({
