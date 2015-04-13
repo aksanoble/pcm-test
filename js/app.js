@@ -75,26 +75,30 @@ $(function () {
     events: {
       'click td': 'updateKey',
       'click button': 'onSubmit'
+
     },
 
     onSubmit: function() {
       this.updateStat();
-  //    this.updatePopover();
       this.publishNow();
+      this.events["click td"] = undefined;
+      this.events["click button"] = undefined;
+      this.delegateEvents(this.events);
+      $('.navbar-text').removeClass('hidden');
+      $('button').addClass('hidden');
     },
 
     publishNow: function() {pubnub.publish({
       channel : 'test11',
       message : app.popOverView.model.get('stats'),
-      callback: function(m){ console.log("sent!"); }
-    });},
+      callback: function(m){console.log("sent!");}
+      });
+    },
 
     initialize: function () {
       this.model.on('all', this.render, this);
-      //this.model.on('change', this.updateStat, this);
-      this.model.fetch();
+      //this.model.fetch();
       this.render();
-
     },
 
     updateKey: function (e) {
@@ -147,20 +151,20 @@ $(function () {
         var statString = data.toString() + "/" + totalHits;
         var $cell = $("td:not(:first-child):eq(" + cell+ ")");
         $cell.attr('data-content', statString).data('bs.popover').setContent();
-        });},
+      });
+    },
 
     initialize: function () {
       $el = this.$el;
       $el.popover({
-      title: '',
-      trigger: 'hover',
-      container: 'body',
-      placement: 'top',
+        title: '',
+        trigger: 'hover',
+        container: 'body',
+        placement: 'top',
       });
       pubnub.subscribe(subscribeObj);
       this.model.on('all', this.render, this);
     }
-
   });
 
   app.popOverView = new app.PopOverView({model: new app.Stat({id:4890})});
