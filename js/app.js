@@ -74,7 +74,7 @@ $(function () {
 
     events: {
       'click td': 'updateKey',
-      'click button': 'onSubmit'
+      'click #publish': 'onSubmit'
 
     },
 
@@ -84,6 +84,7 @@ $(function () {
       this.events["click td"] = undefined;
       this.events["click button"] = undefined;
       this.delegateEvents(this.events);
+      $('#confirm').modal('hide');
       $('.navbar-text').removeClass('hidden');
       $('button').addClass('hidden');
     },
