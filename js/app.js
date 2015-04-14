@@ -1,5 +1,7 @@
 $(function () {
   var app = app || {};
+
+  // PubNub initialize
   uuid = PUBNUB.uuid();
       pubnub = PUBNUB.init({
           publish_key   : 'demo',
@@ -10,26 +12,28 @@ $(function () {
           console.log(time);
       });
 
+  // Define Subscribe Object for PubNub Subscribe
   var subscribeObj = {
     channel : 'test11',
 
+  // On receiving message update Stats model
     message : function( message, env, channel ){
-              // RECEIVED A MESSAGE.
       console.log("message received");
       var wireStat = message;
       var currentStat = app.popOverView.model.get('stats');
+  // Count total submissions
       var totalHitsOnWire = _.reduce(_.first(wireStat, 4), function(sum, el) {
         return sum + el;}, 0);
 
       var totalHitsCurrent = _.reduce(_.first(currentStat, 4), function(sum, el) {
         return sum + el;}, 0);
-
+  // Update stats model if submissions on wire is more then local
       if (totalHitsOnWire > totalHitsCurrent ) {
         app.popOverView.model.set({stats: wireStat});
         app.popOverView.model.save();
         }
     },
-
+  // Fetch initial stats from PubNub wire on Connect
     connect: function() {
       pubnub.history({
         channel: 'test11',
@@ -50,6 +54,7 @@ $(function () {
 
   };
 
+  // Define Backbone Stats model
   app.Stat = Backbone.Model.extend({
     defaults: {
       stats: [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
@@ -58,7 +63,7 @@ $(function () {
     localStorage: new Backbone.LocalStorage("pcm-stat")
   });
 
-  //Defining Matrix Key Model
+  //Defining Backbone Model for table cells
   app.Key = Backbone.Model.extend({
     defaults: {
       key: [0, 0, 0, 0, 0, 0]
@@ -67,7 +72,7 @@ $(function () {
     localStorage: new Backbone.LocalStorage("pcm-matrix")
   });
 
-  // Main View
+  // Backbone Main View
   app.View = Backbone.View.extend({
 
     el: '#mainview',
@@ -98,7 +103,6 @@ $(function () {
 
     initialize: function () {
       this.model.on('all', this.render, this);
-      //this.model.fetch();
       this.render();
     },
 
@@ -134,8 +138,10 @@ $(function () {
 
   });
 
-
+  //Inititialize new App View
   var App = new app.View({model: new app.Key({id: 27182})});
+
+  // Define Backbone view for Popover
 
     app.PopOverView = Backbone.View.extend({
 
