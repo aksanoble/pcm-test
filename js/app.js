@@ -154,7 +154,6 @@ $(function () {
         return sum + el;}, 0).toString();
 
       _.map(flatStat, function(data, cell){
-        cell = cell;
         var statString = data.toString() + "/" + totalHits;
         var $cell = $("td:not(:first-child):eq(" + cell+ ")");
         $cell.attr('data-content', statString).data('bs.popover').setContent();
