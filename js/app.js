@@ -14,7 +14,7 @@ $(function () {
 
   // Define Subscribe Object for PubNub Subscribe
   var subscribeObj = {
-    channel : 'test11',
+    channel : 'pcm-stats',
 
   // On receiving message update Stats model
     message : function( message, env, channel ){
@@ -36,7 +36,7 @@ $(function () {
   // Fetch initial stats from PubNub wire on Connect
     connect: function() {
       pubnub.history({
-        channel: 'test11',
+        channel: 'pcm-stats',
         count: 1,
         callback: function(m){
           app.popOverView.model.set({stats: m[0][0]});
@@ -95,7 +95,7 @@ $(function () {
     },
 
     publishNow: function() {pubnub.publish({
-      channel : 'test11',
+      channel : 'pcm-stats',
       message : app.popOverView.model.get('stats'),
       callback: function(m){console.log("sent!");}
       });
