@@ -52,7 +52,7 @@ $(function () {
 
   app.Stat = Backbone.Model.extend({
     defaults: {
-      stats: [[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+      stats: [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
     },
 
     localStorage: new Backbone.LocalStorage("pcm-stat")
@@ -61,7 +61,7 @@ $(function () {
   //Defining Matrix Key Model
   app.Key = Backbone.Model.extend({
     defaults: {
-      key: [0, 0, 0]
+      key: [0, 0, 0, 0, 0, 0]
     },
 
     localStorage: new Backbone.LocalStorage("pcm-matrix")
