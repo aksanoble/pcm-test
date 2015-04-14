@@ -24,3 +24,15 @@ th{
 .table-body{
   font-size: 1.2rem;
   cursor: pointer;}
+
+.table{
+    margin-top: 8em;
+}
+
+#submit{
+  margin-top: 1em;
+  margin-right: 1em;
+}
+.navbar-text {
+  margin-right: 1em;
+}
