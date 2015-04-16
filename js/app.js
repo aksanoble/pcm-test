@@ -11,7 +11,6 @@ $(function () {
       pubnub.time(function(time){
           console.log(time);
       });
-
   // Define Subscribe Object for PubNub Subscribe
   var subscribeObj = {
     channel : 'pcm-stats',
@@ -79,8 +78,7 @@ $(function () {
 
     events: {
       'click td': 'updateKey',
-      'click #publish': 'onSubmit'
-
+      'click #publish': 'onSubmit',
     },
 
     onSubmit: function() {

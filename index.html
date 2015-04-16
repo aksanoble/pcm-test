@@ -8,13 +8,15 @@
   <meta name="author" content="aksanoble">
 
   <title>Programmer Competency Matrix</title>
-  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" media="all">
   <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 
 <div id="mainview" class="container">
-  <nav class="navbar navbar-default navbar-fixed-top">
+  <div>
+    <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="navbar-brand" href="#">Programmer Competency Matrix</a>
@@ -22,42 +24,51 @@
       <p class="navbar-text navbar-right hidden"> <a href="index.html">Refresh</a> to submit another response</p>
       <button id="submit" type="button" class="btn btn-success navbar-btn navbar-right" data-toggle="modal" data-target="#confirm">Submit</button>
     </div>
-  </nav>
+    </nav>
+  </div>
 
+  <div class="well well-sm">
+    <span>Submit your current competency by clicking on appropriate level and find your place among peers in real-time!</span><br />
+    <ul>
+      <li><span class="help-text">Hover over each cell to get total hits for each cell</span></li>
+      <li><span class="help-text">Click on the first cell to reset your selection for each row.</span></li>
+    </ul>
+
+  </div>
   <table class="table table-bordered table-hover" id="pcm-table">
     <thead class="table-head">
     <tr>
-      <th class=col-md-1> </th>
+      <th class=col-md-2> </th>
       <th class="col-md-2">Level 0</th>
-      <th class="col-md-3">Level 1</th>
+      <th class="col-md-2">Level 1</th>
       <th class="col-md-3">Level 2</th>
       <th class="col-md-3">Level 3</th>
     </tr>
     </thead>
     <tbody class="table-body">
     <tr>
-      <td>Algorithms</td>
+      <td class="clear">Algorithms</td>
       <td>Has not been involved in developing any algorithm</td>
       <td>Has been involved in algorithm development and has implemented that in a source code</td>
       <td>Has been involved in building many algorithms and have writen code based on those</td>
       <td>Is proficient in building and enhancing algorithms and converting them to a well structured code</td>
     </tr>
     <tr>
-      <td>Code Structure</td>
+      <td class="clear">Code Structure</td>
       <td>Has not been involved in writing or source code with any thought on structuring</td>
       <td>Has been involved in writing or modifying large source code with partial structuring</td>
       <td>Has been involved in writing or modifying large source code with adequate structuring</td>
       <td>Has been involved in writing or modifying large source code with good structuring and module separation for reduced coupling and increased coheshion</td>
     </tr>
     <tr>
-      <td>Error Handling</td>
+      <td class="clear">Error Handling</td>
       <td>Has not implemented any error handling mechanism in the code</td>
       <td>Has implemented some error handling mechanisms in the code with reasonable consistency</td>
       <td>Has implemented good error handling mechanisms in the code with reasonable consistency and realiability</td>
       <td>Has implemented very good error handling mechanisms in the code with good consistency and have guarded against negative, invalid and boundary conditions</td>
     </tr>
     <tr>
-      <td>Design Robustness</td>
+      <td class="clear">Design Robustness</td>
       <td>Has not implemented mechanisms for handling load, performance reliability related issues in the code</td>
       <td>Has implemented some basic strategies for handling few of the load, performance reliability related issues in the code</td>
       <td>Has implemented some good strategies for handling few of the load, performance reliability related issues in the code</td>
@@ -65,14 +76,14 @@
     </tr>
 
     <tr>
-      <td>Version Control</td>
+      <td class="clear">Version Control</td>
       <td>Is not aware of version control systems</td>
       <td>Has good understanding of version control systems and has worked under it as the lone developer</td>
       <td>Has good understanding of version control systems and has worked under it in collaboration with other developers</td>
       <td> Has good understanding of version control systems and has worked under it in collaboration with other developers involving many branches/forks and mearges accross releases</td>
     </tr>
     <tr>
-      <td>Usage of SDKs and APIs</td>
+      <td class="clear">Usage of SDKs and APIs</td>
       <td>Has not used any third party frameworks / SDKs in the code</td>
       <td>Has used one or more third party frameworks / SDKs in the code consistently</td>
       <td>Is profecient in incorporating many features and facilities of some third party frameworks / SDKs in the code</td>
@@ -80,6 +91,7 @@
     </tr>
     </tbody>
   </table>
+
   <div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -93,10 +105,9 @@
       </div>
     </div>
   </div>
-</div>
+
 
 </div>
-
 <script src="http://cdn.pubnub.com/pubnub-3.7.1.min.js"></script>
 <script src="js/lib/jquery/dist/jquery-2.1.3.min.js"></script>
 <script src="js/lib/bootstrap/bootstrap.min.js"></script>
