@@ -62,6 +62,7 @@ $(function () {
     localStorage: new Backbone.LocalStorage("pcm-stat")
   });
 
+
   //Defining Backbone Model for table cells
   app.Key = Backbone.Model.extend({
     defaults: {
@@ -78,7 +79,21 @@ $(function () {
 
     events: {
       'click td': 'updateKey',
+      'click #submit': 'checkAllRows',
       'click #publish': 'onSubmit',
+      'click #alertClose': 'hideAlert'
+    },
+
+    checkAllRows: function () {
+      console.log('checkAllrowsTriggered!');
+      if(_.contains(this.model.get('key'), 0))
+        $('.alert').show();
+      else $('.confirm').show();
+
+    },
+
+    rowNotClicked: function () {
+      _.contains(this.model.get('key'), 0);
     },
 
     onSubmit: function() {
@@ -101,6 +116,8 @@ $(function () {
 
     initialize: function () {
       this.model.on('all', this.render, this);
+      $('.alert').hide();
+      $('#confirm').modal({ show: false});
       this.render();
     },
 
@@ -133,6 +150,10 @@ $(function () {
       app.popOverView.model.set({stats: currentStat});
       app.popOverView.model.save();
     },
+
+    hideAlert: function() {
+      $('.alert').hide();
+    }
 
   });
 

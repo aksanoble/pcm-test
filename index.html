@@ -22,7 +22,7 @@
         <a class="navbar-brand" href="#">Programmer Competency Matrix</a>
       </div>
       <p class="navbar-text navbar-right hidden"> <a href="index.html">Refresh</a> to submit another response</p>
-      <button id="submit" type="button" class="btn btn-success navbar-btn navbar-right" data-toggle="modal" data-target="#confirm">Submit</button>
+      <button id="submit" type="button" class="btn btn-success navbar-btn navbar-right" data-target="#confirm">Submit</button>
     </div>
     </nav>
   </div>
@@ -35,6 +35,13 @@
     </ul>
 
   </div>
+  <div class="alert alert-warning" role="alert">
+    <button id="alertClose" type="button" class="close" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    Please choose a cell for each row before submission.
+  </div>
+
   <table class="table table-bordered table-hover" id="pcm-table">
     <thead class="table-head">
     <tr>
@@ -106,6 +113,7 @@
     </div>
   </div>
 
+</div>
 </div>
 <script src="http://cdn.pubnub.com/pubnub-3.7.1.min.js"></script>
 <script src="js/lib/jquery/dist/jquery-2.1.3.min.js"></script>
