@@ -4,8 +4,8 @@ $(function () {
   // PubNub initialize
   uuid = PUBNUB.uuid();
       pubnub = PUBNUB.init({
-          publish_key   : 'demo',
-          subscribe_key : 'demo'
+          publish_key   : 'pub-c-cccc9d9c-50db-4aba-9f5f-11a800dd17b5',
+          subscribe_key : 'sub-c-5e2f4258-e7dc-11e4-8e57-02ee2ddab7fe'
       });
 
       pubnub.time(function(time){
@@ -87,8 +87,8 @@ $(function () {
     checkAllRows: function () {
       console.log('checkAllrowsTriggered!');
       if(_.contains(this.model.get('key'), 0))
-        $('.alert').show();
-      else $('.confirm').show();
+        $('#alertModal').modal('show');
+      else $('#confirm').modal('show');
 
     },
 
