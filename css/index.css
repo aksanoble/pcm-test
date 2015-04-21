@@ -1,9 +1,18 @@
 @media(max-width:767px){
-  table, thead, tbody, th, td, tr {
+  table, thead, tbody, th, td, tr{
     display: block;
   }
   thead {
     display: none;
+  }
+  .well{
+    margin-top: 9em;
+  }
+}
+
+@media not all and (max-width: 767px) {
+  .well{
+    margin-top: 5em;
   }
 }
 
@@ -26,13 +35,40 @@ th{
   cursor: pointer;}
 
 .table{
-    margin-top: 8em;
+    margin-top: 0em;
 }
 
 #submit{
   margin-top: 1em;
   margin-right: 1em;
 }
+
 .navbar-text {
   margin-right: 1em;
+}
+
+.clear:after{
+  display: none;
+  content: "\f021";
+  font-family: FontAwesome;
+  -webkit-transition-duration: 1s;
+  transition-duration: 1s;
+  -webkit-transition-property: transform;
+  transition-property: transform;
+  -webkit-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+}
+
+tr:hover .clear:after{
+  display: inline-block;
+  float: right;
+}
+
+.clear:hover:after{
+  -webkit-transform: rotate(360deg);
+  transform: rotate(360deg);
+}
+
+.help-text{
+font-size: small;
 }
